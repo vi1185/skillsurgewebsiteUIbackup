@@ -9,7 +9,7 @@ import UserMenu from './UserMenu';
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,6 +26,10 @@ const Header = () => {
         { href: '/practice-projects', label: 'Practice Projects' },
         { href: '/community', label: 'Community' },
     ];
+
+    if (status === 'loading') {
+        return <div className="animate-pulse">Loading...</div>
+    }
 
     return (
         <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 
