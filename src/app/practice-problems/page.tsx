@@ -2,14 +2,16 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Code, Layout, Database, Server } from 'lucide-react'
+import { Code, Layout, Search, Server, Filter } from 'lucide-react'
 import Link from 'next/link'
-import Header from '../components/Header'
 import Footer from '../components/Footer'
+import PracticeProblemCard from './components/PracticeProblemCard'
+import Header from '../components/Header'
 
 const PracticeProblemsPage = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedDifficulty, setSelectedDifficulty] = useState('All')
+    const [selectedCategory, setSelectedCategory] = useState('All')
 
     const problems = [
         {
@@ -46,6 +48,7 @@ const PracticeProblemsPage = () => {
 
     const filteredProblems = problems.filter(problem => 
         (selectedDifficulty === 'All' || problem.difficulty === selectedDifficulty) &&
+        (selectedCategory === 'All' || problem.category === selectedCategory) &&
         problem.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
@@ -81,80 +84,79 @@ const PracticeProblemsPage = () => {
                 {/* Search and Filter Section */}
                 <section className="py-12 bg-dark-gray">
                     <div className="container mx-auto px-4">
-                        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-                            <div className="w-full md:w-1/2 mb-4 md:mb-0">
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Search problems..."
-                                        className="w-full bg-black text-white rounded-full py-2 px-4 pl-10 
-                                                 focus:outline-none focus:ring-2 focus:ring-primary"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                    <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
+                        <div className="flex flex-col lg:flex-row gap-8">
+                            {/* Sidebar */}
+                            <aside className="w-full lg:w-1/4 bg-black/80 p-6 rounded-xl">
+                                {/* Search Bar */}
+                                <div className="mb-6">
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Search problems..."
+                                            className="w-full bg-black text-white rounded-full py-2 px-4 pl-10 
+                                                     focus:outline-none focus:ring-2 focus:ring-primary"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                        />
+                                        <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="w-full md:w-1/2 flex justify-center md:justify-end space-x-4 overflow-x-auto">
-                                {difficulties.map((difficulty) => (
-                                    <button
-                                        key={difficulty}
-                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-                                            selectedDifficulty === difficulty
-                                                ? 'bg-primary text-white'
-                                                : 'bg-black text-white hover:bg-primary/20'
-                                        }`}
-                                        onClick={() => setSelectedDifficulty(difficulty)}
-                                    >
-                                        {difficulty}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                                
+                                {/* Difficulty Filters */}
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold mb-4">Difficulty</h3>
+                                    <div className="flex flex-col space-y-2">
+                                        {difficulties.map((difficulty) => (
+                                            <button
+                                                key={difficulty}
+                                                className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                                                    selectedDifficulty === difficulty
+                                                        ? 'bg-primary text-white'
+                                                        : 'bg-black text-white hover:bg-primary/20'
+                                                }`}
+                                                onClick={() => setSelectedDifficulty(difficulty)}
+                                            >
+                                                {difficulty}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                {/* Category Filters */}
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-semibold mb-4">Category</h3>
+                                    <div className="flex flex-col space-y-2">
+                                        {['All', 'Algorithms', 'Frontend', 'Backend'].map((category) => (
+                                            <button
+                                                key={category}
+                                                className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                                                    selectedCategory === category
+                                                        ? 'bg-primary text-white'
+                                                        : 'bg-black text-white hover:bg-primary/20'
+                                                }`}
+                                                onClick={() => setSelectedCategory(category)}
+                                            >
+                                                {category}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </aside>
 
-                {/* Problems Grid */}
-                <section className="py-12 bg-black">
-                    <div className="container mx-auto px-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredProblems.map((problem, index) => (
-                                <motion.div
-                                    key={index}
-                                    className="bg-dark-gray rounded-xl p-6 hover:bg-gradient-to-br 
-                                             hover:from-primary/20 hover:to-secondary/20 transition-all duration-300 
-                                             transform hover:scale-105"
-                                    initial={{ opacity: 0, y: 50 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    viewport={{ once: true }}
-                                >
-                                    <div className="flex items-center mb-4">
-                                        <div className="bg-primary rounded-full p-2 mr-4">
-                                            {problem.icon}
-                                        </div>
-                                        <h3 className="text-xl font-semibold">{problem.title}</h3>
+                            {/* Main Content */}
+                            <section className="w-full lg:w-3/4">
+                                {filteredProblems.length > 0 ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {filteredProblems.map((problem, index) => (
+                                            <PracticeProblemCard key={index} problem={problem} />
+                                        ))}
                                     </div>
-                                    <p className="text-gray-300 mb-4">{problem.description}</p>
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className={`text-sm px-3 py-1 rounded-full ${
-                                            problem.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
-                                            problem.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                            'bg-red-100 text-red-700'
-                                        }`}>
-                                            {problem.difficulty}
-                                        </span>
-                                        <div className="flex items-center space-x-4 text-sm text-gray-400">
-                                            <span>⭐ {problem.rating}</span>
-                                            <span>🏆 {problem.completions}</span>
-                                        </div>
+                                ) : (
+                                    <div className="text-center text-gray-300">
+                                        No problems match your search criteria.
                                     </div>
-                                    <button className="w-full bg-primary text-white py-2 rounded-full 
-                                                     hover:bg-white hover:text-primary transition-all duration-300">
-                                        Solve Now
-                                    </button>
-                                </motion.div>
-                            ))}
+                                )}
+                            </section>
                         </div>
                     </div>
                 </section>

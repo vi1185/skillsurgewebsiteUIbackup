@@ -2,12 +2,20 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { MessageSquare, Calendar, Users } from 'lucide-react'
 import Link from 'next/link'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { MessageSquare, Calendar, Users, Code, Layout, Database, Server } from 'lucide-react'
+import NumberTicker from '@/components/ui/number-ticker'
 
 const CommunityPage = () => {
+  const communityStats = [
+    { label: 'Active Members', value: 50000, icon: <Users className="w-6 h-6" /> },
+    { label: 'Daily Discussions', value: 1000, icon: <MessageSquare className="w-6 h-6" /> },
+    { label: 'Monthly Events', value: 500, icon: <Calendar className="w-6 h-6" /> },
+    { label: 'Expert Mentors', value: 100, icon: <Code className="w-6 h-6" /> },
+  ];
+
   return (
     <div className="bg-black text-white min-h-screen font-sans">
       <Header />
@@ -21,6 +29,7 @@ const CommunityPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
+                aria-label="Join the SkillSurge Community"
               >
                 Join the SkillSurge Community
               </motion.h1>
@@ -29,6 +38,7 @@ const CommunityPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
+                aria-live="polite"
               >
                 Connect, learn, and grow with like-minded developers
               </motion.p>
@@ -70,7 +80,9 @@ const CommunityPage = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="mb-4 flex justify-center">{feature.icon}</div>
+                  <div className="mb-4 flex justify-center">
+                    {feature.icon}
+                  </div>
                   <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                   <p className="text-gray-300">{feature.description}</p>
                 </motion.div>
@@ -87,23 +99,28 @@ const CommunityPage = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { name: 'Emily Chen', role: 'Full Stack Developer', avatar: '👩‍💻' },
-                { name: 'David Kim', role: 'Machine Learning Engineer', avatar: '👨‍💻' },
-                { name: 'Sarah Johnson', role: 'UX Designer', avatar: '👩‍🎨' },
+                { name: 'Emily Chen', role: 'Full Stack Developer', avatar: '/avatars/emily.jpg' },
+                { name: 'David Kim', role: 'Machine Learning Engineer', avatar: '/avatars/david.jpg' },
+                { name: 'Sarah Johnson', role: 'UX Designer', avatar: '/avatars/sarah.jpg' },
               ].map((member, index) => (
                 <motion.div
                   key={index}
-                  className="bg-dark-gray rounded-xl p-6 text-center"
+                  className="bg-dark-gray rounded-xl p-6 text-center hover:bg-gradient-to-br 
+                           hover:from-primary/20 hover:to-secondary/20 transition-all duration-300 
+                           transform hover:scale-105"
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="text-5xl mb-4">{member.avatar}</div>
+                  <div className="mb-4">
+                    <img src={member.avatar} alt={`${member.name} Avatar`} className="w-24 h-24 rounded-full mx-auto object-cover" />
+                  </div>
                   <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
                   <p className="text-gray-300 mb-4">{member.role}</p>
                   <button className="bg-primary text-white px-4 py-2 rounded-full 
-                                   hover:bg-white hover:text-primary transition-all duration-300">
+                                     hover:bg-white hover:text-primary transition-all duration-300 
+                                     transform hover:scale-105">
                     View Profile
                   </button>
                 </motion.div>
@@ -112,63 +129,47 @@ const CommunityPage = () => {
           </div>
         </section>
 
-        {/* Upcoming Events Section */}
-        <section className="py-20 bg-dark-gray">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Upcoming Community Events
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                { title: 'Web Development Workshop', date: 'June 15, 2024', time: '2:00 PM - 4:00 PM EST' },
-                { title: 'Machine Learning Hackathon', date: 'July 1-3, 2024', time: 'All Day' },
-                { title: 'Design Systems Webinar', date: 'July 20, 2024', time: '1:00 PM - 2:30 PM EST' },
-                { title: 'Code Review Best Practices', date: 'August 5, 2024', time: '11:00 AM - 12:00 PM EST' },
-              ].map((event, index) => (
-                <motion.div
-                  key={index}
-                  className="bg-black rounded-xl p-6"
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
-                  <p className="text-gray-300 mb-1">{event.date}</p>
-                  <p className="text-gray-400 mb-4">{event.time}</p>
-                  <button className="bg-transparent text-primary border border-primary px-4 py-2 
-                                   rounded-full hover:bg-primary hover:text-white transition-all duration-300">
-                    Learn More
-                  </button>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Community Stats Section */}
+        {/* Community Stats Section with Number Ticker */}
         <section className="py-20 bg-black">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-clip-text 
+                                 text-transparent bg-gradient-to-r from-primary to-secondary">
               Our Growing Community
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { stat: '50,000+', label: 'Active Members' },
-                { stat: '1,000+', label: 'Daily Discussions' },
-                { stat: '500+', label: 'Monthly Events' },
-                { stat: '100+', label: 'Expert Mentors' },
-              ].map((item, index) => (
+              {communityStats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  className="text-center"
+                  className="bg-dark-gray rounded-xl p-6 text-center"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-3xl md:text-4xl font-bold text-primary mb-2">{item.stat}</h3>
-                  <p className="text-gray-300">{item.label}</p>
+                  <div className="flex justify-center mb-4">
+                    <div className="bg-primary/20 p-3 rounded-full">
+                      {stat.icon}
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-primary mb-2">
+                    <NumberTicker
+                      value={stat.value}
+                      direction="up"
+                      delay={index * 0.2}
+                      className="text-3xl font-bold text-primary"
+                    />
+                    {stat.value > 1000 ? '+' : ''}
+                  </div>
+                  <div className="text-gray-400">{stat.label}</div>
+                  <motion.div
+                    className="w-full h-1 bg-primary/20 mt-4 rounded-full overflow-hidden"
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    transition={{ duration: 1, delay: index * 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="h-full bg-primary w-full origin-left" />
+                  </motion.div>
                 </motion.div>
               ))}
             </div>

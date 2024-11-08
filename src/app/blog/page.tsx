@@ -5,40 +5,27 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import PracticeProjectCard from '../components/PracticeProjectCard'
-import ProjectSubmissionForm from '../components/ProjectSubmissionForm'
-import ProjectsList from '../components/ProjectsList'
+import { BookOpen, Calendar, Tag } from 'lucide-react'
 
-
-const practiceProjects = [
+const blogPosts = [
   {
-    title: 'E-commerce Platform',
-    level: 'Advanced',
-    duration: '4-6 weeks',
-    description: 'Build a full-fledged e-commerce platform with features like cart, payment integration, and product management.',
-    technologies: ['React', 'Next.js', 'Stripe', 'Tailwind CSS'],
-    slug: 'e-commerce-platform',
+    title: 'Getting Started with Next.js',
+    excerpt: 'Learn how to build your first Next.js application with this comprehensive guide.',
+    date: '2023-08-15',
+    tags: ['Next.js', 'React', 'JavaScript'],
+    slug: 'getting-started-with-nextjs',
   },
   {
-    title: 'Social Media App',
-    level: 'Intermediate',
-    duration: '3-4 weeks',
-    description: 'Create a social media application where users can post, comment, like, and follow others.',
-    technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
-    slug: 'social-media-app',
+    title: 'Understanding Prisma ORM',
+    excerpt: 'A deep dive into Prisma ORM and how it can streamline your database management.',
+    date: '2023-07-10',
+    tags: ['Prisma', 'Database', 'TypeScript'],
+    slug: 'understanding-prisma-orm',
   },
-  {
-    title: 'Task Management System',
-    level: 'Intermediate',
-    duration: '2-3 weeks',
-    description: 'Develop a task management system to organize and track tasks efficiently.',
-    technologies: ['Vue.js', 'Firebase', 'Tailwind CSS'],
-    slug: 'task-management-system',
-  },
-  // Add more projects as needed
+  // Add more blog posts as needed
 ]
 
-const PracticeProjectsPage = () => {
+const BlogPage = () => {
   return (
     <div className="bg-black text-white min-h-screen font-sans">
       <Header />
@@ -51,9 +38,9 @@ const PracticeProjectsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              aria-label="Practice Projects"
+              aria-label="SkillSurge Blog"
             >
-              Practice Projects
+              SkillSurge Blog
             </motion.h1>
             <motion.p 
               className="text-xl md:text-2xl text-gray-300 mb-8"
@@ -62,7 +49,7 @@ const PracticeProjectsPage = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               aria-live="polite"
             >
-              Dive into real-world projects that help you build and showcase your skills.
+              Stay updated with the latest tutorials, tips, and news from the SkillSurge community.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -70,24 +57,57 @@ const PracticeProjectsPage = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <Link href="/signup"
-                className="bg-primary text-white px-8 py-3 rounded-full text-lg font-semibold 
-                         hover:bg-white hover:text-primary transition-all duration-300 
+                className="bg-white text-primary px-8 py-3 rounded-full text-lg font-semibold 
+                         hover:bg-black hover:text-white transition-all duration-300 
                          transform hover:scale-105">
-                Get Started Now
+                Join Now
               </Link>
             </motion.div>
           </div>
         </section>
 
-        {/* Practice Projects Section */}
+        {/* Blog Posts Section */}
         <section className="py-20 bg-dark-gray">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Featured Projects
+              Latest Articles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {practiceProjects.map((project, index) => (
-                <PracticeProjectCard key={index} project={project} />
+              {blogPosts.map((post, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-black rounded-xl p-6 text-center hover:bg-gradient-to-br 
+                           hover:from-primary/20 hover:to-secondary/20 transition-all duration-300 
+                           transform hover:scale-105"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="mb-4 flex justify-center">
+                    <BookOpen className="w-12 h-12 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
+                  <p className="text-gray-300 mb-4">{post.excerpt}</p>
+                  <div className="flex justify-center items-center mb-4">
+                    <Calendar className="w-5 h-5 text-gray-400 mr-2" />
+                    <span className="text-gray-400">{post.date}</span>
+                  </div>
+                  <div className="flex justify-center items-center gap-2 mb-4">
+                    {post.tags.map((tag, idx) => (
+                      <div key={idx} className="flex items-center gap-1 text-sm text-gray-400">
+                        <Tag className="w-4 h-4" />
+                        <span>{tag}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href={`/blog/${post.slug}`}
+                    className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold 
+                             hover:bg-white hover:text-primary transition-all duration-300 
+                             transform hover:scale-105">
+                    Read More
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -103,7 +123,7 @@ const PracticeProjectsPage = () => {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Ready to Start Building?
+              Ready to Share Your Knowledge?
             </motion.h2>
             <motion.p
               className="text-xl mb-8 max-w-2xl mx-auto"
@@ -112,7 +132,7 @@ const PracticeProjectsPage = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              Join our community and start building real-world projects that matter.
+              Become a contributor and share your insights with the SkillSurge community.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -135,4 +155,4 @@ const PracticeProjectsPage = () => {
   )
 }
 
-export default PracticeProjectsPage
+export default BlogPage 

@@ -1,132 +1,118 @@
 'use client';
 import React from 'react';
+import ReactFlow, { Background, BackgroundVariant, Controls, useNodesState, useEdgesState } from 'reactflow';
+import 'reactflow/dist/style.css';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import RoadmapFlow from '../../components/RoadmapFlow';
 
-const FrontendRoadmap = () => {
-    return (
-        <div className="bg-black text-white min-h-screen">
-            <Header />
-            <main className="pt-24 pb-12">
-                <section className="py-12 bg-gradient-to-b from-black to-dark-gray">
-                    <div className="container mx-auto px-4">
-                        <motion.h1
-                            className="text-4xl md:text-6xl font-bold text-center mb-6 bg-clip-text 
-                                     text-transparent bg-gradient-to-r from-primary to-secondary"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            Frontend Development Roadmap
-                        </motion.h1>
-                        <motion.p
-                            className="text-xl text-center text-gray-300 mb-8"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                            Master modern frontend development with this comprehensive learning path
-                        </motion.p>
-                    </div>
-                </section>
+const initialNodes = [
+  // Define your frontend nodes here
+  {
+    id: '1',
+    type: 'input',
+    data: { label: 'HTML & CSS' },
+    position: { x: 250, y: 5 },
+  },
+  // Add more nodes as needed
+];
 
-                <section className="py-12 bg-dark-gray">
-                    <div className="container mx-auto px-4">
-                        <RoadmapFlow roadmapId="frontend-development" />
-                    </div>
-                </section>
+const initialEdges = [
+  // Define your frontend edges here
+  { id: 'e1-2', source: '1', target: '2', animated: false },
+  // Add more edges as needed
+];
 
-                {/* Resources Section */}
-                <section className="py-20 bg-black">
-                    <div className="container mx-auto px-4">
-                        <h2 className="text-3xl font-bold mb-12 text-center">Essential Resources</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {[
-                                {
-                                    title: 'Documentation',
-                                    description: 'Official documentation and guides for frontend technologies',
-                                    links: ['MDN Web Docs', 'React Documentation', 'TypeScript Handbook']
-                                },
-                                {
-                                    title: 'Practice Projects',
-                                    description: 'Real-world projects to build your portfolio',
-                                    links: ['Portfolio Website', 'E-commerce Dashboard', 'Social Media App']
-                                },
-                                {
-                                    title: 'Community Support',
-                                    description: 'Connect with other frontend developers',
-                                    links: ['Discord Channel', 'Study Groups', 'Code Reviews']
-                                }
-                            ].map((resource, index) => (
-                                <motion.div
-                                    key={index}
-                                    className="bg-dark-gray rounded-xl p-6"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    viewport={{ once: true }}
-                                >
-                                    <h3 className="text-xl font-semibold mb-4">{resource.title}</h3>
-                                    <p className="text-gray-400 mb-4">{resource.description}</p>
-                                    <ul className="space-y-2">
-                                        {resource.links.map((link, linkIndex) => (
-                                            <li key={linkIndex} className="text-primary hover:text-white cursor-pointer">
-                                                {link}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+const FrontendRoadmapPage = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-                {/* Learning Path Progress */}
-                <section className="py-20 bg-dark-gray">
-                    <div className="container mx-auto px-4">
-                        <h2 className="text-3xl font-bold mb-12 text-center">Your Progress</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            {[
-                                { label: 'Completed Modules', value: '0/16' },
-                                { label: 'Current Level', value: 'Beginner' },
-                                { label: 'Hours Spent', value: '0' },
-                                { label: 'Projects Done', value: '0' }
-                            ].map((stat, index) => (
-                                <motion.div
-                                    key={index}
-                                    className="bg-black rounded-xl p-6 text-center"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    viewport={{ once: true }}
-                                >
-                                    <div className="text-2xl font-bold text-primary mb-2">{stat.value}</div>
-                                    <div className="text-gray-400">{stat.label}</div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+  return (
+    <div className="bg-black text-white min-h-screen font-sans">
+      <Header />
+      <main>
+        {/* Roadmap Section */}
+        <section className="py-20 bg-black">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              Frontend Development Roadmap
+            </h2>
+            <div className="h-96">
+              <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                fitView
+                nodesDraggable={false}
+                elementsSelectable={false}
+                zoomOnScroll={false}
+                zoomOnPinch={false}
+                panOnScroll={false}
+                selectionOnDrag={false}
+                zoomOnDoubleClick={false}
+              >
+                {/* Remove Controls if not needed */}
+                {/* <Controls /> */}
+                {/* Customize Background */}
+                <Background variant={BackgroundVariant.Dots} gap={12} size={1} color="transparent" />
+              </ReactFlow>
+            </div>
+          </div>
+        </section>
 
-                {/* Next Steps */}
-                <section className="py-20 bg-gradient-to-r from-primary to-secondary">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl font-bold mb-8">Ready to Start Your Journey?</h2>
-                        <p className="text-xl mb-8 max-w-2xl mx-auto">
-                            Begin your frontend development journey today and build amazing web experiences.
-                        </p>
-                        <button className="bg-white text-primary px-8 py-3 rounded-full text-lg font-semibold 
-                                         hover:bg-black hover:text-white transition-all duration-300">
-                            Start Learning
-                        </button>
-                    </div>
-                </section>
-            </main>
-            <Footer />
-        </div>
-    );
-};
+        {/* Resources Section */}
+        <section className="py-20 bg-black">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent 
+                          bg-gradient-to-r from-primary to-secondary">
+              Recommended Resources
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Add resource cards here */}
+            </div>
+          </div>
+        </section>
 
-export default FrontendRoadmap; 
+        {/* Practice Projects Section */}
+        <section className="py-20 bg-dark-gray">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">Practice Projects</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { title: 'Portfolio Website', level: 'Beginner', duration: '1-2 weeks' },
+                { title: 'E-commerce UI', level: 'Intermediate', duration: '2-3 weeks' },
+                { title: 'Social Media Dashboard', level: 'Advanced', duration: '3-4 weeks' },
+              ].map((project, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-black/50 rounded-xl p-6 hover:bg-gradient-to-br hover:from-primary/20 
+                           hover:to-secondary/20 transition-all duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                  <div className="flex justify-between text-sm text-gray-400 mb-4">
+                    <span>{project.level}</span>
+                    <span>{project.duration}</span>
+                  </div>
+                  <Link href={`/practice-projects/${project.title.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="block w-full bg-primary text-white py-2 rounded-full text-center
+                             hover:bg-white hover:text-primary transition-all duration-300">
+                    View Project
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+export default FrontendRoadmapPage 
